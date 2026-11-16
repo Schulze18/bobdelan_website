@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control</title>
+<title>BoBDeLaN</title>
+<link rel="icon" href="./static/images/Robot_arm_icon.svg">
 <style>
   body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.5; text-align: center; color: #222; }
   h1 { font-size: 1.8rem; }
@@ -11,16 +12,72 @@
   ul { list-style: none; padding: 0; }
   li { margin: .5rem 0; }
   .soon { color: #888; }
+  .authors { font-size: 1.1rem; margin: 1rem 0 .2rem; }
+  .note { color: #555; font-size: .9rem; margin: 0 0 1rem; }
+  .overview { text-align: left; margin-top: 2rem; }
+  .overview ul { list-style: disc; padding-left: 1.5rem; }
+  .overview li { margin: .4rem 0; }
+  .overview figure { margin: 1.5rem 0; text-align: center; }
+  .overview img { max-width: 100%; height: auto; }
+  .overview figcaption { color: #555; font-size: .9rem; margin-top: .5rem; }
+  .videos { margin-top: 2rem; }
+  .video { margin: 1.5rem 0; }
+  .overview h2, .videos h2 { text-align: center; }
+  .video h3 { font-size: 1rem; margin: 0 0 .5rem; text-align: left; }
+  .video .desc { text-align: left; color: #444; font-size: .95rem; margin: 0 0 .75rem; }
+  .frame { position: relative; padding-bottom: 56.25%; height: 0; }
+  .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 </style>
 </head>
 <body>
   <h1>BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control</h1>
+  <p class="authors">Lucas Schulze<sup>1,*</sup>, Sucheth Shenoy<sup>1,*</sup>, Jan Peters<sup>1,2</sup>, Oleg Arenz<sup>1</sup></p>
+  <p class="note"><sup>1</sup> Technical University of Darmstadt, Robotics Institute Germany (RIG)<br>
+  <sup>2</sup> DFKI; hessian.AI<br>
+  <sup>*</sup> Equal contribution</p>
   <p class="venue">Submitted to the 9th Annual Learning for Dynamics &amp; Control Conference (L4DC 2027)</p>
   <ul>
     <li>Paper: <span class="soon">coming soon</span></li>
     <li>Code: <span class="soon">coming soon</span></li>
-    <li>Video experiments: <span class="soon">coming soon</span></li>
   </ul>
+  <section class="overview" id="overview">
+    <h2>Overview</h2>
+    <p>Context-Aware Deep Lagrangian Networks adapt to unknown payloads by inferring a latent context from measurement histories. However, the LSTM encoder they rely on provides no guarantees on sensitivity to measurement disturbances. <strong>BoBDeLaN</strong> addresses this limitation by combining a contracting, gain-bounded Recurrent Equilibrium Network (<strong>REN</strong>) with stable linear filtering, enabling frequency-shaped disturbance sensitivity while preserving the Lagrangian structure.</p>
+    <p><strong>Key contributions and results:</strong></p>
+    <ul>
+      <li><strong>Theoretical guarantees:</strong> Exponential forgetting of recurrent initial states and frequency-weighted bounds on context and residual torque prediction sensitivity.</li>
+      <li><strong>Frequency-shaped adaptation:</strong> Reduced high-frequency sensitivity compared to an LSTM encoder using the same input filter.</li>
+      <li><strong>Improved dynamics prediction:</strong> Lower residual torque prediction errors and smoother control across simulated payload variations.</li>
+      <li><strong>Robust hardware control:</strong> Real-world pick-and-place experiments demonstrate substantially less performance degradation under injected disturbances compared to the LSTM baseline.</li>
+    </ul>
+    <figure>
+      <img src="./static/images/bobdelan_cadelac_architecture.png" alt="BoBDeLaN architecture: measurement history, pre-filter, REN encoder, and context passed to an MPC with nominal model and Contextual DeLaN, controlling a Franka robot arm">
+      <figcaption>BoBDeLaN architecture: a filtered measurement history is encoded by a REN into a context that conditions the Contextual DeLaN model used within MPC.</figcaption>
+    </figure>
+  </section>
+  <section class="videos" id="videos">
+    <h2>Real Hardware Experiments</h2>
+    <div class="video">
+      <h3>Adaptive Control with Changing Payloads</h3>
+      <p class="desc">We compare nominal MPC, CaDeLaC with an LSTM encoder, and CaDeLaC with BoBDeLaN on a real Franka Panda performing a pick-and-place task with changing payloads. Both learned controllers improve dynamics prediction, while BoBDeLaN achieves smoother motion and lower residual torque prediction errors.</p>
+      <div class="frame"><iframe src="https://www.youtube.com/embed/60jX0-HgNZk" title="Adaptive Control with Changing Payloads" loading="lazy" allowfullscreen></iframe></div>
+    </div>
+    <div class="video">
+      <h3>Adaptive Control with Changing Payloads under Disturbances</h3>
+      <p class="desc">We repeat the experiment with injected 5 Hz and 10 Hz disturbances in the encoder's torque measurements. While the CaDeLaC LSTM exhibits substantially degraded tracking and oscillatory motion, BoBDeLaN maintains smoother and more robust control.</p>
+      <div class="frame"><iframe src="https://www.youtube.com/embed/bqXlafW6awc" title="Adaptive Control with Changing Payloads under Disturbances" loading="lazy" allowfullscreen></iframe></div>
+    </div>
+    <div class="video">
+      <h3>CaDeLaC BoBDeLaN: With and Without Disturbances</h3>
+      <p class="desc">We compare BoBDeLaN with and without injected measurement disturbances. Its gain-bounded recurrent encoder and low-pass filtering limit the effect of disturbances, resulting in only small degradation in tracking and motion smoothness.</p>
+      <div class="frame"><iframe src="https://www.youtube.com/embed/Iz4FGWwXgJA" title="BoBDeLaN: With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
+    </div>
+    <div class="video">
+      <h3>CaDeLaC LSTM: With and Without Disturbances</h3>
+      <p class="desc">We compare the original CaDeLaC LSTM with and without the same injected disturbances. Despite using identical input filtering, the LSTM encoder exhibits substantially increased sensitivity, leading to larger tracking errors and more oscillatory motion.</p>
+      <div class="frame"><iframe src="https://www.youtube.com/embed/HlkrY1fL8bs" title="CaDeLaC (LSTM): With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
+    </div>
+  </section>
   <p class="soon"><em>The answer, my friend, is blowin' in the wind... until we release the code.</em></p>
 </body>
 </html>
