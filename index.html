@@ -5,79 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BoBDeLaN</title>
 <link rel="icon" href="./static/images/Robot_arm_icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.5; text-align: center; color: #222; }
-  h1 { font-size: 1.8rem; }
-  .venue { color: #555; margin-bottom: 2rem; }
-  ul { list-style: none; padding: 0; }
-  li { margin: .5rem 0; }
-  .soon { color: #888; }
-  .authors { font-size: 1.1rem; margin: 1rem 0 .2rem; }
-  .note { color: #555; font-size: .9rem; margin: 0 0 1rem; }
-  .overview { text-align: left; margin-top: 2rem; }
-  .overview ul { list-style: disc; padding-left: 1.5rem; }
-  .overview li { margin: .4rem 0; }
-  .overview figure { margin: 1.5rem 0; text-align: center; }
-  .overview img { max-width: 100%; height: auto; }
-  .overview figcaption { color: #555; font-size: .9rem; margin-top: .5rem; }
-  .videos { margin-top: 2rem; }
-  .video { margin: 1.5rem 0; }
-  .overview h2, .videos h2 { text-align: center; }
-  .video h3 { font-size: 1rem; margin: 0 0 .5rem; text-align: left; }
-  .video .desc { text-align: left; color: #444; font-size: .95rem; margin: 0 0 .75rem; }
-  .frame { position: relative; padding-bottom: 56.25%; height: 0; }
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --text: #1c1f26; --muted: #5d6573;
+    --border: #e3e6eb; --accent: #d62828; --accent-soft: #fdecec;
+    --shadow: 0 1px 2px rgba(16,24,40,.05), 0 6px 20px rgba(16,24,40,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101216; --surface: #181b21; --text: #eceef2; --muted: #9aa3b2;
+      --border: #272b33; --accent: #ff5a5a; --accent-soft: #2a1819;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.35);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; line-height: 1.6; }
+  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1rem; }
+  a { color: var(--accent); }
+
+  nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  nav .wrap { display: flex; gap: 1.5rem; align-items: center; height: 3rem; }
+  nav .brand { font-weight: 700; margin-right: auto; color: var(--text); text-decoration: none; }
+  nav a.link { color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500; }
+  nav a.link:hover { color: var(--accent); }
+
+  header { text-align: center; padding: 3.5rem 0 2rem; }
+  .badge { display: inline-block; background: var(--accent-soft); color: var(--accent); font-size: .8rem; font-weight: 600; padding: .3rem .8rem; border-radius: 999px; margin-bottom: 1.2rem; }
+  h1 { font-size: clamp(1.7rem, 4.5vw, 2.7rem); line-height: 1.2; font-weight: 800; letter-spacing: -.02em; margin: 0 auto 1.4rem; max-width: 52rem; }
+  h1 .name { color: var(--accent); }
+  .authors { font-size: 1.1rem; font-weight: 500; margin: 0 0 .6rem; }
+  .authors span { white-space: nowrap; }
+  .authors .sep { color: var(--muted); }
+  .affil { color: var(--muted); font-size: .88rem; margin: 0; }
+  .affil span { display: inline-block; margin: 0 .6rem; }
+
+  .buttons { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: 1.8rem; }
+  .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .55rem 1.1rem; border-radius: 999px; font-size: .92rem; font-weight: 600; text-decoration: none; border: 1px solid var(--border); background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.disabled { color: var(--muted); box-shadow: none; cursor: default; background: transparent; border-style: dashed; }
+  .btn small { font-weight: 500; opacity: .8; }
+
+  .hero { margin: 1rem 0 0; }
+  .card-surface, .hero .frame-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+  .hero .frame-card { padding: 1rem; }
+  .hero img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .hero figcaption { color: var(--muted); font-size: .88rem; text-align: center; margin-top: .8rem; }
+  @media (prefers-color-scheme: dark) { .hero .frame-card { background: #fff; } .hero figcaption { color: #5d6573; } }
+
+  section { padding: 3rem 0 .5rem; }
+  h2 { text-align: center; font-size: 2.1rem; font-weight: 800; letter-spacing: -.01em; margin: 0 0 1.5rem; }
+  h2::after { content: ""; display: block; width: 3.5rem; height: 4px; background: var(--accent); border-radius: 2px; margin: .7rem auto 0; }
+  .lead { max-width: 46rem; margin: 0 auto 2rem; font-size: 1.05rem; color: var(--text); }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow); }
+  .card h3 { margin: 0 0 .4rem; font-size: 1rem; color: var(--accent); }
+  .card p { margin: 0; font-size: .95rem; color: var(--muted); }
+
+  .video-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  .video { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .video h3 { font-size: 1.15rem; margin: 0 0 .4rem; text-align: left; }
+  .video .desc { text-align: left; color: var(--muted); font-size: .98rem; margin: 0 0 1rem; flex: 1; }
+  .frame { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #000; }
   .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  footer { text-align: center; color: var(--muted); font-size: .9rem; padding: 3rem 0 3rem; }
+
+  @media (max-width: 720px) {
+    .cards { grid-template-columns: 1fr; }
+    header { padding-top: 2.2rem; }
+    nav .link { display: none; }
+  }
 </style>
 </head>
 <body>
-  <h1>BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control</h1>
-  <p class="authors">Lucas Schulze<sup>1,*</sup>, Sucheth Shenoy<sup>1,*</sup>, Jan Peters<sup>1,2</sup>, Oleg Arenz<sup>1</sup></p>
-  <p class="note"><sup>1</sup> Technical University of Darmstadt, Robotics Institute Germany (RIG)<br>
-  <sup>2</sup> DFKI; hessian.AI<br>
-  <sup>*</sup> Equal contribution</p>
-  <p class="venue">Submitted to the 9th Annual Learning for Dynamics &amp; Control Conference (L4DC 2027)</p>
-  <ul>
-    <li>Paper: <span class="soon">coming soon</span></li>
-    <li>Code: <span class="soon">coming soon</span></li>
-  </ul>
-  <section class="overview" id="overview">
-    <h2>Overview</h2>
-    <p>Context-Aware Deep Lagrangian Networks adapt to unknown payloads by inferring a latent context from measurement histories. However, the LSTM encoder they rely on provides no guarantees on sensitivity to measurement disturbances. <strong>BoBDeLaN</strong> addresses this limitation by combining a contracting, gain-bounded Recurrent Equilibrium Network (<strong>REN</strong>) with stable linear filtering, enabling frequency-shaped disturbance sensitivity while preserving the Lagrangian structure.</p>
-    <p><strong>Key contributions and results:</strong></p>
-    <ul>
-      <li><strong>Theoretical guarantees:</strong> Exponential forgetting of recurrent initial states and frequency-weighted bounds on context and residual torque prediction sensitivity.</li>
-      <li><strong>Frequency-shaped adaptation:</strong> Reduced high-frequency sensitivity compared to an LSTM encoder using the same input filter.</li>
-      <li><strong>Improved dynamics prediction:</strong> Lower residual torque prediction errors and smoother control across simulated payload variations.</li>
-      <li><strong>Robust hardware control:</strong> Real-world pick-and-place experiments demonstrate substantially less performance degradation under injected disturbances compared to the LSTM baseline.</li>
-    </ul>
-    <figure>
-      <img src="./static/images/bobdelan_cadelac_architecture.png" alt="BoBDeLaN architecture: measurement history, pre-filter, REN encoder, and context passed to an MPC with nominal model and Contextual DeLaN, controlling a Franka robot arm">
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="#top">BoBDeLaN</a>
+      <a class="link" href="#overview">Overview</a>
+      <a class="link" href="#experiments">Experiments</a>
+    </div>
+  </nav>
+
+  <div class="wrap" id="top">
+    <header>
+      <span class="badge">L4DC 2027 &middot; Submitted</span>
+      <h1><span class="name">BoBDeLaN:</span> Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control</h1>
+      <p class="authors"><span>Lucas Schulze<sup>1,*</sup></span><span class="sep">,</span> <span>Sucheth Shenoy<sup>1,*</sup></span><span class="sep">,</span> <span>Jan Peters<sup>1,2</sup></span><span class="sep">,</span> <span>Oleg Arenz<sup>1</sup></span></p>
+      <p class="affil"><span><sup>1</sup> Technical University of Darmstadt, Robotics Institute Germany (RIG)</span><span><sup>2</sup> DFKI; hessian.AI</span></p>
+      <p class="affil"><span><sup>*</sup> Equal contribution</span></p>
+      <p class="affil" style="margin-top:.8rem">Submitted to the 9th Annual Learning for Dynamics &amp; Control Conference (L4DC 2027)</p>
+      <div class="buttons">
+        <span class="btn disabled">Paper <small>coming soon</small></span>
+        <span class="btn disabled">Code <small>coming soon</small></span>
+        <a class="btn primary" href="#experiments">Videos</a>
+      </div>
+    </header>
+
+    <figure class="hero">
+      <div class="frame-card">
+        <img src="./static/images/bobdelan_cadelac_architecture.png" alt="BoBDeLaN architecture: measurement history, pre-filter, REN encoder, and context passed to an MPC with nominal model and Contextual DeLaN, controlling a Franka robot arm">
+      </div>
       <figcaption>BoBDeLaN architecture: a filtered measurement history is encoded by a REN into a context that conditions the Contextual DeLaN model used within MPC.</figcaption>
     </figure>
-  </section>
-  <section class="videos" id="videos">
-    <h2>Real Hardware Experiments</h2>
-    <div class="video">
-      <h3>Adaptive Control with Changing Payloads</h3>
-      <p class="desc">We compare nominal MPC, CaDeLaC with an LSTM encoder, and CaDeLaC with BoBDeLaN on a real Franka Panda performing a pick-and-place task with changing payloads. Both learned controllers improve dynamics prediction, while BoBDeLaN achieves smoother motion and lower residual torque prediction errors.</p>
-      <div class="frame"><iframe src="https://www.youtube.com/embed/60jX0-HgNZk" title="Adaptive Control with Changing Payloads" loading="lazy" allowfullscreen></iframe></div>
-    </div>
-    <div class="video">
-      <h3>Adaptive Control with Changing Payloads under Disturbances</h3>
-      <p class="desc">We repeat the experiment with injected 5 Hz and 10 Hz disturbances in the encoder's torque measurements. While the CaDeLaC LSTM exhibits substantially degraded tracking and oscillatory motion, BoBDeLaN maintains smoother and more robust control.</p>
-      <div class="frame"><iframe src="https://www.youtube.com/embed/bqXlafW6awc" title="Adaptive Control with Changing Payloads under Disturbances" loading="lazy" allowfullscreen></iframe></div>
-    </div>
-    <div class="video">
-      <h3>CaDeLaC BoBDeLaN: With and Without Disturbances</h3>
-      <p class="desc">We compare BoBDeLaN with and without injected measurement disturbances. Its gain-bounded recurrent encoder and low-pass filtering limit the effect of disturbances, resulting in only small degradation in tracking and motion smoothness.</p>
-      <div class="frame"><iframe src="https://www.youtube.com/embed/Iz4FGWwXgJA" title="BoBDeLaN: With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
-    </div>
-    <div class="video">
-      <h3>CaDeLaC LSTM: With and Without Disturbances</h3>
-      <p class="desc">We compare the original CaDeLaC LSTM with and without the same injected disturbances. Despite using identical input filtering, the LSTM encoder exhibits substantially increased sensitivity, leading to larger tracking errors and more oscillatory motion.</p>
-      <div class="frame"><iframe src="https://www.youtube.com/embed/HlkrY1fL8bs" title="CaDeLaC (LSTM): With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
-    </div>
-  </section>
-  <p class="soon"><em>The answer, my friend, is blowin' in the wind... until we release the code.</em></p>
+
+    <section id="overview">
+      <h2>Overview</h2>
+      <p class="lead">Context-Aware Deep Lagrangian Networks adapt to unknown payloads by inferring a latent context from measurement histories. However, the LSTM encoder they rely on provides no guarantees on sensitivity to measurement disturbances. <strong>BoBDeLaN</strong> addresses this limitation by combining a contracting, gain-bounded Recurrent Equilibrium Network (<strong>REN</strong>) with stable linear filtering, enabling frequency-shaped disturbance sensitivity while preserving the Lagrangian structure.</p>
+      <div class="cards">
+        <div class="card"><h3>Theoretical guarantees</h3><p>Exponential forgetting of recurrent initial states and frequency-weighted bounds on context and residual torque prediction sensitivity.</p></div>
+        <div class="card"><h3>Frequency-shaped adaptation</h3><p>Reduced high-frequency sensitivity compared to an LSTM encoder using the same input filter.</p></div>
+        <div class="card"><h3>Improved dynamics prediction</h3><p>Lower residual torque prediction errors and smoother control across simulated payload variations.</p></div>
+        <div class="card"><h3>Robust hardware control</h3><p>Real-world pick-and-place experiments demonstrate substantially less performance degradation under injected disturbances compared to the LSTM baseline.</p></div>
+      </div>
+    </section>
+
+    <section id="experiments">
+      <h2>Real Hardware Experiments</h2>
+      <div class="video-grid">
+      <article class="video">
+        <h3>Adaptive Control with Changing Payloads</h3>
+        <p class="desc">We compare nominal MPC, CaDeLaC with an LSTM encoder, and CaDeLaC with BoBDeLaN on a real Franka Panda performing a pick-and-place task with changing payloads. Both learned controllers improve dynamics prediction, while BoBDeLaN achieves smoother motion and lower residual torque prediction errors.</p>
+        <div class="frame"><iframe src="https://www.youtube.com/embed/60jX0-HgNZk" title="Adaptive Control with Changing Payloads" loading="lazy" allowfullscreen></iframe></div>
+      </article>
+      <article class="video">
+        <h3>Adaptive Control with Changing Payloads under Disturbances</h3>
+        <p class="desc">We repeat the experiment with injected 5 Hz and 10 Hz disturbances in the encoder's torque measurements. While the CaDeLaC LSTM exhibits substantially degraded tracking and oscillatory motion, BoBDeLaN maintains smoother and more robust control.</p>
+        <div class="frame"><iframe src="https://www.youtube.com/embed/bqXlafW6awc" title="Adaptive Control with Changing Payloads under Disturbances" loading="lazy" allowfullscreen></iframe></div>
+      </article>
+      <article class="video">
+        <h3>CaDeLaC BoBDeLaN: With and Without Disturbances</h3>
+        <p class="desc">We compare BoBDeLaN with and without injected measurement disturbances. Its gain-bounded recurrent encoder and low-pass filtering limit the effect of disturbances, resulting in only small degradation in tracking and motion smoothness.</p>
+        <div class="frame"><iframe src="https://www.youtube.com/embed/Iz4FGWwXgJA" title="BoBDeLaN: With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
+      </article>
+      <article class="video">
+        <h3>CaDeLaC LSTM: With and Without Disturbances</h3>
+        <p class="desc">We compare the original CaDeLaC LSTM with and without the same injected disturbances. Despite using identical input filtering, the LSTM encoder exhibits substantially increased sensitivity, leading to larger tracking errors and more oscillatory motion.</p>
+        <div class="frame"><iframe src="https://www.youtube.com/embed/HlkrY1fL8bs" title="CaDeLaC (LSTM): With and Without Disturbances" loading="lazy" allowfullscreen></iframe></div>
+      </article>
+      </div>
+    </section>
+
+    <footer>
+      <em>The answer, my friend, is blowin' in the wind... until we release the code.</em>
+    </footer>
+  </div>
 </body>
 </html>
