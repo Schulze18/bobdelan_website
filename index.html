@@ -72,6 +72,17 @@
   .frame { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #000; }
   .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
+  .bib { max-width: 46rem; margin: 0 auto; }
+  .bib p { text-align: center; color: var(--muted); margin: 0 0 1rem; }
+  .bib-box { position: relative; }
+  .bib-box pre code { font-family: monospace; font-size: 13px; color: color-mix(in srgb, var(--muted) 25%, var(--text)); }
+  .bib-box pre { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); padding: 1.1rem 3rem 1.1rem 1.3rem; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+  .copy-btn { position: absolute; top: .6rem; right: .6rem; padding: .4rem; background: none; border: none; border-radius: 8px; cursor: pointer; color: var(--muted); display: flex; }
+  .copy-btn:hover { color: var(--accent); background: var(--accent-soft); }
+  #copy-status { display: none; text-align: right; font-size: .85rem; color: #2e9e5b; margin-top: .5rem; }
+
+  .ack { margin: 0; text-align: left; color: var(--muted); font-size: .95rem; }
+
   footer { text-align: center; color: var(--muted); font-size: .9rem; padding: 3rem 0 3rem; }
 
   @media (max-width: 720px) {
@@ -87,6 +98,7 @@
       <a class="brand" href="#top">BoBDeLaN</a>
       <a class="link" href="#overview">Overview</a>
       <a class="link" href="#experiments">Experiments</a>
+      <a class="link" href="#citation">Citation</a>
     </div>
   </nav>
 
@@ -99,7 +111,7 @@
       <p class="affil"><span><sup>*</sup> Equal contribution</span></p>
       <p class="affil" style="margin-top:.8rem">Submitted to the 9th Annual Learning for Dynamics &amp; Control Conference (L4DC 2027)</p>
       <div class="buttons">
-        <span class="btn disabled">Paper <small>coming soon</small></span>
+        <a class="btn primary" href="https://arxiv.org/abs/2611.21209" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.8423 0a1.0037 1.0037 0 0 0-.922.6078c-.1536.3687-.0438.6275.2938 1.1113l6.9185 8.3597-1.0223 1.1058a1.0393 1.0393 0 0 0 .003 1.4229l1.2292 1.3135-5.4391 6.4444c-.2803.299-.4538.823-.2971 1.1986a1.0253 1.0253 0 0 0 .9585.635.9133.9133 0 0 0 .6891-.3405l5.783-6.126 7.4902 8.0051a.8527.8527 0 0 0 .6835.2597.9575.9575 0 0 0 .8777-.6138c.1577-.377-.017-.7502-.306-1.1407l-7.0518-8.3418 1.0632-1.13a.9626.9626 0 0 0 .0089-1.3165L4.6336.4639s-.3733-.4535-.768-.463zm0 .272h.0166c.2179.0052.4874.2715.5644.3639l.005.006.0052.0055 10.169 10.9905a.6915.6915 0 0 1-.0072.945l-1.0666 1.133-1.4982-1.7724-8.5994-10.39c-.3286-.472-.352-.6183-.2592-.841a.7307.7307 0 0 1 .6704-.4401Zm14.341 1.5701a.877.877 0 0 0-.6554.2418l-5.6962 6.1584 1.6944 1.8319 5.3089-6.5138c.3251-.4335.479-.6603.3247-1.0292a1.1205 1.1205 0 0 0-.9763-.689zm-7.6557 12.2823 1.3186 1.4135-5.7864 6.1295a.6494.6494 0 0 1-.4959.26.7516.7516 0 0 1-.706-.4669c-.1119-.2682.0359-.6864.2442-.9083l.0051-.0055.0047-.0055z"/></svg> Paper</a>
         <span class="btn disabled">Code <small>coming soon</small></span>
         <a class="btn primary" href="#experiments">Videos</a>
       </div>
@@ -149,9 +161,50 @@
       </div>
     </section>
 
+    <section id="citation">
+      <h2>Citation</h2>
+      <div class="bib">
+        <p>If you find this work useful, please consider citing:</p>
+        <div class="bib-box">
+          <button class="copy-btn" onclick="copyBibtex()" aria-label="Copy BibTeX">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <pre><code id="bibtex-code">@misc{schulze2026bobdelanboundedbandwidthcontextadaptation,
+      title={BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control},
+      author={Lucas Schulze and Sucheth Shenoy and Jan Peters and Oleg Arenz},
+      year={2026},
+      eprint={2611.21209},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2611.21209},
+}</code></pre>
+        </div>
+        <div id="copy-status" role="status"></div>
+      </div>
+    </section>
+
+    <section id="acknowledgment">
+      <h2>Acknowledgment</h2>
+      <p class="ack">This work was funded by the German Research Foundation (DFG) - Project number PE 2315/18-1, and by the German Federal Ministry of Research, Technology and Space (BMFTR) - Project number 01IS23057B, and as part of the Robotics Institute Germany (RIG). This project has been supported by a hardware donation by NVIDIA through the Academic Grant Program.</p>
+    </section>
+
     <footer>
       <em>The answer, my friend, is blowin' in the wind... until we release the code.</em>
     </footer>
   </div>
+  <script>
+    function copyBibtex() {
+      var code = document.getElementById("bibtex-code").innerText;
+      var status = document.getElementById("copy-status");
+      function show(msg, color) {
+        status.textContent = msg; status.style.color = color; status.style.display = "block";
+        setTimeout(function () { status.style.display = "none"; }, 2000);
+      }
+      navigator.clipboard.writeText(code).then(
+        function () { show("Copied to clipboard \u2713", "#2e9e5b"); },
+        function () { show("Failed to copy.", "#d62828"); }
+      );
+    }
+  </script>
 </body>
 </html>
