@@ -2,7 +2,7 @@
 
 This repository contains the source code for the [BoBDeLaN website](https://schulze18.github.io/bobdelan_website).
 
-BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control. Submitted to the 9th Annual Learning for Dynamics & Control Conference (L4DC 2027).
+BoBDeLaN: Bounded-Bandwidth Context Adaptation for Deep Lagrangian Robot Control.
 
 If you find this work useful, please consider citing:
 ```
